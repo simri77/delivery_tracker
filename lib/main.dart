@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-// Correct import paths pointing to the screens folder
-import 'screens/home_screen.dart';
-import 'screens/delivery_screen.dart';
-import 'screens/profile_screen.dart';
+// Import the navigation shell
+import 'screens/main_shell.dart';
 
 void main() {
   runApp(
@@ -26,15 +24,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF10B981)),
         useMaterial3: true,
       ),
-      // Fixed typo: initialRoute instead of intialRoute
-      initialRoute: '/',
-      
-      // Removed 'const' from screen instances inside route builders
-      routes: {
-        '/': (context) => HomeScreen(),
-        '/delivery': (context) => DeliveryScreen(),
-        '/profile': (context) => ProfileScreen(),
-      },
+      // Set MainShell as the initial home view
+      home: const MainShell(),
     );
   }
 }
