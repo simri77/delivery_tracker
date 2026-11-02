@@ -36,7 +36,11 @@ class HomeScreen extends StatelessWidget {
             
             // Active Order Card
             GestureDetector(
-              onTap: () => Navigator.pushNamed(context, '/delivery'),
+              // Inside home_screen.dart, replace the onTap callback:
+              onTap: () {
+                // Find the parent Scaffold or TabController if needed, 
+                // or use a callback to switch tabs in MainShell.
+              },
               child: Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
