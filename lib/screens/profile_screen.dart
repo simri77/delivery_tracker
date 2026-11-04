@@ -18,13 +18,14 @@ class ProfileScreen extends StatelessWidget {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           children: [
-            // User Hero Header Card
+            // User Header Card
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(24),
               decoration: _cardDecoration(),
               child: Column(
                 children: [
@@ -32,17 +33,17 @@ class ProfileScreen extends StatelessWidget {
                     alignment: Alignment.bottomRight,
                     children: [
                       Container(
-                        width: 80,
-                        height: 80,
+                        width: 86,
+                        height: 86,
                         decoration: BoxDecoration(
                           color: const Color(0xFFECFDF5),
                           shape: BoxShape.circle,
-                          border: Border.all(color: const Color(0xFF10B981), width: 2),
+                          border: Border.all(color: const Color(0xFF10B981), width: 2.5),
                         ),
-                        child: const Icon(Icons.person, size: 48, color: Color(0xFF10B981)),
+                        child: const Icon(Icons.person, size: 52, color: Color(0xFF10B981)),
                       ),
                       Container(
-                        padding: const EdgeInsets.all(4),
+                        padding: const EdgeInsets.all(5),
                         decoration: const BoxDecoration(
                           color: Color(0xFF10B981),
                           shape: BoxShape.circle,
@@ -51,40 +52,38 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
-                  // Generic Default Name
+                  const SizedBox(height: 14),
                   const Text(
                     'Alex Johnson',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF0F172A)),
+                    style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold, color: Color(0xFF0F172A)),
                   ),
-                  const SizedBox(height: 2),
+                  const SizedBox(height: 3),
                   const Text(
                     'alex.johnson@example.com',
                     style: TextStyle(color: Color(0xFF64748B), fontSize: 13),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 14),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
                     decoration: BoxDecoration(
                       color: const Color(0xFFEFF6FF),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: const Text(
-                      'Gold Member',
+                      'Gold Tier Member',
                       style: TextStyle(color: Color(0xFF1D4ED8), fontWeight: FontWeight.bold, fontSize: 11),
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
 
-            // Account & Preferences List Container
+            // Settings Tile Group
             Container(
               decoration: _cardDecoration(),
               child: Column(
                 children: [
-                  // Generic Delivery Address Tile
                   _buildTile(
                     icon: Icons.location_on_outlined,
                     iconColor: const Color(0xFFEF4444),
@@ -93,25 +92,25 @@ class ProfileScreen extends StatelessWidget {
                     subtitle: '742 Evergreen Terrace, Springfield',
                     onTap: () {},
                   ),
-                  const Divider(height: 1, indent: 56, color: Color(0xFFF1F5F9)),
+                  const Divider(height: 1, indent: 64, color: Color(0xFFF1F5F9)),
                   _buildTile(
                     icon: Icons.history,
                     iconColor: const Color(0xFF3B82F6),
                     iconBgColor: const Color(0xFFEFF6FF),
                     title: 'Order History',
-                    subtitle: '12 completed orders',
+                    subtitle: '12 past deliveries completed',
                     onTap: () {},
                   ),
-                  const Divider(height: 1, indent: 56, color: Color(0xFFF1F5F9)),
+                  const Divider(height: 1, indent: 64, color: Color(0xFFF1F5F9)),
                   _buildTile(
-                    icon: Icons.payment_outlined,
+                    icon: Icons.credit_card_outlined,
                     iconColor: const Color(0xFF10B981),
                     iconBgColor: const Color(0xFFECFDF5),
                     title: 'Payment Methods',
-                    subtitle: 'Credit Card, Cash on Delivery',
+                    subtitle: 'Visa •••• 4242',
                     onTap: () {},
                   ),
-                  const Divider(height: 1, indent: 56, color: Color(0xFFF1F5F9)),
+                  const Divider(height: 1, indent: 64, color: Color(0xFFF1F5F9)),
                   _buildTile(
                     icon: Icons.notifications_none_outlined,
                     iconColor: const Color(0xFFF59E0B),
@@ -139,12 +138,12 @@ class ProfileScreen extends StatelessWidget {
   }) {
     return ListTile(
       onTap: onTap,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
       leading: Container(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: iconBgColor,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(14),
         ),
         child: Icon(icon, color: iconColor, size: 20),
       ),
@@ -156,20 +155,20 @@ class ProfileScreen extends StatelessWidget {
         subtitle,
         style: const TextStyle(color: Color(0xFF64748B), fontSize: 12),
       ),
-      trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: Color(0xFF94A3B8)),
+      trailing: const Icon(Icons.arrow_forward_ios, size: 13, color: Color(0xFF94A3B8)),
     );
   }
 
   BoxDecoration _cardDecoration() {
     return BoxDecoration(
       color: Colors.white,
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(22),
       border: Border.all(color: const Color(0xFFF1F5F9), width: 1.5),
       boxShadow: [
         BoxShadow(
           color: const Color(0xFF0F172A).withOpacity(0.04),
-          blurRadius: 16,
-          offset: const Offset(0, 4),
+          blurRadius: 18,
+          offset: const Offset(0, 5),
         ),
       ],
     );
