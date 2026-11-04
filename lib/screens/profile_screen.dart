@@ -1,31 +1,29 @@
 import 'package:flutter/material.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  bool contactlessDropoff = true;
+  bool ecoElectricDispatch = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
-      appBar: AppBar(
-        title: const Text(
-          'My Profile',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Color(0xFF0F172A)),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        centerTitle: true,
-      ),
+      backgroundColor: const Color(0xFFFAF8FF),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // User Header Card
+            // User Identity & Metrics Card
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(20),
               decoration: _cardDecoration(),
               child: Column(
                 children: [
@@ -33,129 +31,237 @@ class ProfileScreen extends StatelessWidget {
                     alignment: Alignment.bottomRight,
                     children: [
                       Container(
-                        width: 86,
-                        height: 86,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFECFDF5),
+                        width: 80,
+                        height: 80,
+                        padding: const EdgeInsets.all(3),
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFF2F3FF),
                           shape: BoxShape.circle,
-                          border: Border.all(color: const Color(0xFF10B981), width: 2.5),
                         ),
-                        child: const Icon(Icons.person, size: 52, color: Color(0xFF10B981)),
+                        child: const CircleAvatar(
+                          backgroundImage: NetworkImage('https://lh3.googleusercontent.com/aida-public/AB6AXuDmKy34lFYSj8StcN6olagXaoqJKpa5IppYxS6Sf7EuBewns67tWQfgaqiCnrnTucvvACzlfgN8qNLs-RoxSrM6iPT2TKT9jWpersA7qx_OGZGzejNBxJXg-L-P_g-8nnjNTLAUHMeAtusJloQnKocACaFJ_Bdgs3BlFdyEfm2JhPyzSydcGHsnIuBzWkdIXM3Q7qjjWvXqlpfw5_lU2qIn4ZzglRF88kFLiNTK4H9v'),
+                        ),
                       ),
                       Container(
-                        padding: const EdgeInsets.all(5),
+                        padding: const EdgeInsets.all(4),
                         decoration: const BoxDecoration(
                           color: Color(0xFF10B981),
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(Icons.check, size: 12, color: Colors.white),
+                        child: const Icon(Icons.check, size: 14, color: Colors.white),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 14),
+                  const SizedBox(height: 12),
                   const Text(
-                    'Alex Johnson',
-                    style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold, color: Color(0xFF0F172A)),
+                    'Alexandria Rivera',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF131B2E)),
                   ),
-                  const SizedBox(height: 3),
+                  const SizedBox(height: 2),
                   const Text(
-                    'alex.johnson@example.com',
-                    style: TextStyle(color: Color(0xFF64748B), fontSize: 13),
+                    'alex.rivera@deliverymail.com • +1 (555) 382-9102',
+                    style: TextStyle(color: Color(0xFF6C7A71), fontSize: 13),
                   ),
-                  const SizedBox(height: 14),
+                  const SizedBox(height: 12),
+                  // Gold Tier Pill
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFEFF6FF),
+                      color: const Color(0xFFFEF3C7),
                       borderRadius: BorderRadius.circular(20),
                     ),
-                    child: const Text(
-                      'Gold Tier Member',
-                      style: TextStyle(color: Color(0xFF1D4ED8), fontWeight: FontWeight.bold, fontSize: 11),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Icon(Icons.stars, size: 14, color: Color(0xFFB45309)),
+                        SizedBox(width: 4),
+                        Text(
+                          'Gold Tier Member • 4,820 Courier Points',
+                          style: TextStyle(color: Color(0xFFB45309), fontWeight: FontWeight.bold, fontSize: 11),
+                        ),
+                      ],
                     ),
                   ),
+                  const SizedBox(height: 16),
+                  // Metrics Strip
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF2F3FF),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        _buildMetricItem('48', 'Orders', const Color(0xFF131B2E)),
+                        _buildMetricItem('98%', 'On-Time', const Color(0xFF10B981)),
+                        _buildMetricItem('\$124', 'Saved Gold', const Color(0xFF131B2E)),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // Fast Courier Preferences (Toggles - Fixed icon)
+            Container(
+              padding: const EdgeInsets.all(18),
+              decoration: _cardDecoration(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Text(
+                        'FAST COURIER PREFERENCES',
+                        style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF6C7A71), letterSpacing: 0.8),
+                      ),
+                      Row(
+                        children: [
+                          Icon(Icons.bolt, size: 14, color: Color(0xFF10B981)),
+                          Text(
+                            'Live Sync',
+                            style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF10B981)),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  _buildToggleRow(
+                    icon: Icons.meeting_room,
+                    iconColor: const Color(0xFF007353),
+                    bgColor: const Color(0xFF97F5CC).withOpacity(0.4),
+                    title: 'Contactless Drop-off',
+                    subtitle: 'Leave at front door with photo confirmation',
+                    value: contactlessDropoff,
+                    onChanged: (val) => setState(() => contactlessDropoff = val),
+                  ),
+                  const SizedBox(height: 12),
+                  _buildToggleRow(
+                    icon: Icons.electric_bolt,
+                    iconColor: const Color(0xFF00513A),
+                    bgColor: const Color(0xFF97F5CC).withOpacity(0.5),
+                    title: 'Eco Electric Dispatch',
+                    subtitle: 'Priority routing via EV moped & e-cargo',
+                    value: ecoElectricDispatch,
+                    onChanged: (val) => setState(() => ecoElectricDispatch = val),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // Account & Logistics Settings Tiles
+            Container(
+              padding: const EdgeInsets.all(18),
+              decoration: _cardDecoration(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'ACCOUNT & LOGISTICS SETTINGS',
+                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF6C7A71), letterSpacing: 0.8),
+                  ),
+                  const SizedBox(height: 8),
+                  _buildTile(Icons.location_on, const Color(0xFFDC2626), const Color(0xFFFEF2F2), 'Saved Addresses', 'Home, Work, Gym (3 locations)'),
+                  _buildTile(Icons.receipt_long, const Color(0xFF1D4ED8), const Color(0xFFEFF6FF), 'Order & Receipt History', 'View past deliveries and re-order'),
+                  _buildTile(Icons.account_balance_wallet, const Color(0xFF047857), const Color(0xFFECFDF5), 'Payment Methods & Wallet', 'Apple Pay, Visa •••• 4092 • \$35.00 Balance'),
+                  _buildTile(Icons.notifications_active, const Color(0xFFB45309), const Color(0xFFFEF3C7), 'Notifications & Alerts', 'SMS, Push, Live Courier ETA Tracking'),
+                  _buildTile(Icons.volunteer_activism, const Color(0xFF6B21A8), const Color(0xFFF3E8FF), 'Courier Tip Preferences', 'Default 15% courier appreciation'),
+                  _buildTile(Icons.support_agent, const Color(0xFF131B2E), const Color(0xFFE2E7FF), 'Safety & Support', '24/7 Priority Courier Concierge'),
                 ],
               ),
             ),
             const SizedBox(height: 20),
 
-            // Settings Tile Group
-            Container(
-              decoration: _cardDecoration(),
-              child: Column(
-                children: [
-                  _buildTile(
-                    icon: Icons.location_on_outlined,
-                    iconColor: const Color(0xFFEF4444),
-                    iconBgColor: const Color(0xFFFEF2F2),
-                    title: 'Delivery Address',
-                    subtitle: '742 Evergreen Terrace, Springfield',
-                    onTap: () {},
-                  ),
-                  const Divider(height: 1, indent: 64, color: Color(0xFFF1F5F9)),
-                  _buildTile(
-                    icon: Icons.history,
-                    iconColor: const Color(0xFF3B82F6),
-                    iconBgColor: const Color(0xFFEFF6FF),
-                    title: 'Order History',
-                    subtitle: '12 past deliveries completed',
-                    onTap: () {},
-                  ),
-                  const Divider(height: 1, indent: 64, color: Color(0xFFF1F5F9)),
-                  _buildTile(
-                    icon: Icons.credit_card_outlined,
-                    iconColor: const Color(0xFF10B981),
-                    iconBgColor: const Color(0xFFECFDF5),
-                    title: 'Payment Methods',
-                    subtitle: 'Visa •••• 4242',
-                    onTap: () {},
-                  ),
-                  const Divider(height: 1, indent: 64, color: Color(0xFFF1F5F9)),
-                  _buildTile(
-                    icon: Icons.notifications_none_outlined,
-                    iconColor: const Color(0xFFF59E0B),
-                    iconBgColor: const Color(0xFFFEF3C7),
-                    title: 'Notifications',
-                    subtitle: 'Push notifications enabled',
-                    onTap: () {},
-                  ),
-                ],
+            // Logout Action
+            SizedBox(
+              width: double.infinity,
+              height: 48,
+              child: ElevatedButton.icon(
+                onPressed: () {},
+                icon: const Icon(Icons.logout, size: 18, color: Color(0xFFBA1A1A)),
+                label: const Text('Log Out', style: TextStyle(color: Color(0xFFBA1A1A), fontWeight: FontWeight.bold)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFFFDAD6).withOpacity(0.4),
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                ),
               ),
             ),
+            const SizedBox(height: 16),
+            const Text('PRECISION DELIVERY TELEMETRY ACTIVE', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF6C7A71), letterSpacing: 1.0)),
+            const SizedBox(height: 2),
+            const Text('Version 3.4.2 (Precision Delivery Build)', style: TextStyle(fontSize: 10, color: Color(0xFFBBCABF))),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildTile({
+  Widget _buildMetricItem(String val, String label, Color color) {
+    return Column(
+      children: [
+        Text(val, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: color)),
+        const SizedBox(height: 2),
+        Text(label, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFF6C7A71))),
+      ],
+    );
+  }
+
+  Widget _buildToggleRow({
     required IconData icon,
     required Color iconColor,
-    required Color iconBgColor,
+    required Color bgColor,
     required String title,
     required String subtitle,
-    required VoidCallback onTap,
+    required bool value,
+    required ValueChanged<bool> onChanged,
   }) {
-    return ListTile(
-      onTap: onTap,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 6),
-      leading: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: iconBgColor,
-          borderRadius: BorderRadius.circular(14),
+    return Row(
+      children: [
+        Container(
+          width: 36,
+          height: 36,
+          decoration: BoxDecoration(color: bgColor, borderRadius: BorderRadius.circular(12)),
+          child: Icon(icon, color: iconColor, size: 20),
         ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Color(0xFF131B2E))),
+              Text(subtitle, style: const TextStyle(fontSize: 12, color: Color(0xFF6C7A71))),
+            ],
+          ),
+        ),
+        Switch(
+          value: value,
+          onChanged: onChanged,
+          activeColor: Colors.white,
+          activeTrackColor: const Color(0xFF10B981),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTile(IconData icon, Color iconColor, Color bgColor, String title, String subtitle) {
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      leading: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(color: bgColor, borderRadius: BorderRadius.circular(12)),
         child: Icon(icon, color: iconColor, size: 20),
       ),
-      title: Text(
-        title,
-        style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Color(0xFF0F172A)),
-      ),
-      subtitle: Text(
-        subtitle,
-        style: const TextStyle(color: Color(0xFF64748B), fontSize: 12),
-      ),
-      trailing: const Icon(Icons.arrow_forward_ios, size: 13, color: Color(0xFF94A3B8)),
+      title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: Color(0xFF131B2E))),
+      subtitle: Text(subtitle, style: const TextStyle(fontSize: 12, color: Color(0xFF6C7A71)), overflow: TextOverflow.ellipsis),
+      trailing: const Icon(Icons.chevron_right, size: 20, color: Color(0xFFBBCABF)),
+      onTap: () {},
     );
   }
 
