@@ -8,55 +8,6 @@ void main() {
   runApp(const DeliveryTrackerApp());
 }
 
-class _MainNavigationScreenState extends State<MainNavigationScreen> {
-  int _currentIndex = 0;
-
-  final OrderModel sampleOrder = OrderModel(
-    id: 1,
-    orderIdString: 'ORD-8921',
-    status: 'out_for_delivery',
-    estimatedTime: '18 min ETA',
-    driverName: 'Marcus Vance',
-    deliveryAddress: 'Apt 4B, 742 Evergreen Terr',
-    totalPrice: 42.50,
-  );
-
-  @override
-  Widget build(BuildContext context) {
-    final List<Widget> screens = [
-      HomeScreen(
-        onNavigateTab: (index) {
-          setState(() {
-            _currentIndex = index; // Switches tab programmatically!
-          });
-        },
-      ),
-      DeliveryScreen(order: sampleOrder),
-      const ProfileScreen(),
-    ];
-
-    return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: screens,
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) => setState(() => _currentIndex = index),
-        selectedItemColor: const Color(0xFF10B981),
-        unselectedItemColor: const Color(0xFF6C7A71),
-        backgroundColor: Colors.white,
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.local_shipping), label: 'Delivery'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
-      ),
-    );
-  }
-}
-
 class DeliveryTrackerApp extends StatelessWidget {
   const DeliveryTrackerApp({Key? key}) : super(key: key);
 
@@ -66,7 +17,7 @@ class DeliveryTrackerApp extends StatelessWidget {
       title: 'Delivery Tracker',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        fontFamily: 'Roboto', // Or your default font
+        fontFamily: 'Roboto',
         scaffoldBackgroundColor: const Color(0xFFFAF8FF),
       ),
       home: const MainNavigationScreen(),
@@ -83,9 +34,9 @@ class MainNavigationScreen extends StatefulWidget {
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _currentIndex = 0;
-
-  // Sample order instance to satisfy DeliveryScreen's required parameter
-  final OrderModel sampleOrder = OrderModel(
+  
+  // Fallback sample order until live data streams in from HomeScreen
+  OrderModel _currentOrder = OrderModel(
     id: 1,
     orderIdString: 'ORD-8921',
     status: 'out_for_delivery',
@@ -95,24 +46,32 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     totalPrice: 42.50,
   );
 
-  late final List<Widget> _screens;
-
-  @override
-  void initState() {
-    super.initState();
-    _screens = [
-      const HomeScreen(),
-      DeliveryScreen(order: sampleOrder),
-      const ProfileScreen(),
-    ];
-  }
-
   @override
   Widget build(BuildContext context) {
+    // Dynamically build screens list so they receive callbacks and updated orders
+    final List<Widget> screens = [
+      HomeScreen(
+        onNavigateTab: (index) {
+          setState(() {
+            _currentIndex = index; // Switches tab programmatically
+          });
+        },
+        onOrderLoaded: (order) {
+          if (_currentOrder.id != order.id) {
+            setState(() {
+              _currentOrder = order; // Updates order data across tabs
+            });
+          }
+        },
+      ),
+      DeliveryScreen(order: _currentOrder),
+      const ProfileScreen(),
+    ];
+
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
-        children: _screens,
+        children: screens,
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
