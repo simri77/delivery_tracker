@@ -12,7 +12,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   bool contactlessDropoff = true;
   bool ecoElectricDispatch = true;
-  late Future> futureUserProfile;
+  late Future futureUserProfile;
 
   @override
   void initState() {
@@ -20,8 +20,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     futureUserProfile = fetchUserProfile();
   }
 
-  // Fetch user profile from your Express backend API
-  Future> fetchUserProfile() async {
+  Future fetchUserProfile() async {
     try {
       final response = await http.get(Uri.parse('http://localhost:5000/api/user/profile'));
       if (response.statusCode == 200) {
@@ -30,7 +29,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         throw Exception('Failed to load profile');
       }
     } catch (e) {
-      // Fallback mock data if backend isn't connected
       return {
         'name': 'Alexandria Rivera',
         'email': 'alex.rivera@deliverymail.com',
@@ -45,14 +43,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFAF8FF),
-      body: FutureBuilder>(
+      body: FutureBuilder(
         future: futureUserProfile,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator(color: Color(0xFF10B981)));
           }
 
-          final user = snapshot.data ?? {};
+          final user = (snapshot.data ?? {}) as Map;
 
           return SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
@@ -103,7 +101,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 12),
-                      // Gold Tier Pill
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
@@ -123,7 +120,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      // Metrics Strip
                       Container(
                         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
                         decoration: BoxDecoration(
