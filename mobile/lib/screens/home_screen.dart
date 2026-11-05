@@ -8,6 +8,26 @@ class HomeScreen extends StatefulWidget {
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
+class HomeScreen extends StatelessWidget {
+  final Function(int) onNavigateTab;
+
+  const HomeScreen({Key? key, required this.onNavigateTab}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            // Switch directly to the DeliveryScreen tab (index 1)
+            onNavigateTab(1);
+          },
+          child: const Text('Track Live Map'),
+        ),
+      ),
+    );
+  }
+}
 
 class _HomeScreenState extends State<HomeScreen> {
   late Future<OrderModel> futureActiveOrder;
