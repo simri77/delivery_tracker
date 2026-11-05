@@ -1,18 +1,19 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import '../models/order_model.dart';
 
 class ApiService {
-  // Use 'http://10.0.2.2:5000' if using Android Emulator, or 'http://localhost:5000' for Linux desktop
-  static const String baseUrl = 'http://localhost:5000/api';
-
+  // Returns instant mock data so you can build your UI without a running backend
   static Future<OrderModel> fetchActiveOrder() async {
-    final response = await http.get(Uri.parse('$baseUrl/orders/active'));
+    // Simulate a brief network delay if you want, or return immediately
+    await Future.delayed(const Duration(milliseconds: 300));
 
-    if (response.statusCode == 200) {
-      return OrderModel.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to load active order from backend');
-    }
+    return OrderModel(
+      id: 1,
+      orderIdString: 'ORD-8921',
+      status: 'out_for_delivery',
+      estimatedTime: '18 min ETA',
+      driverName: 'Marcus Vance',
+      deliveryAddress: 'Apt 4B, 742 Evergreen Terr',
+      totalPrice: 42.50,
+    );
   }
 }
