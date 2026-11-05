@@ -10,11 +10,11 @@ class DeliveryScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFFAF8FF),
       appBar: AppBar(
-        title: const Text('Live Dispatch Tracking', style: TextStyle(color: Color(0xFF131B2E), fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: const Icon(Icons.arrow_back, color: Color(0xFF131B2E)),
-      ),
+  title: const Text('Live Dispatch Tracking', style: TextStyle(color: Color(0xFF131B2E), fontWeight: FontWeight.bold)),
+  backgroundColor: Colors.white,
+  elevation: 0,
+  iconTheme: const IconThemeData(color: Color(0xFF131B2E)), // Fixed here
+),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.all(16.0),
