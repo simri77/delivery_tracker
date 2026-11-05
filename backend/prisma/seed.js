@@ -32,6 +32,27 @@ async function main() {
       },
     },
   });
+  // Create or update a sample active delivery order safely
+  await prisma.order.upsert({
+    where: { orderIdString: 'ORD-8921' },
+    update: {},
+    create: {
+      orderIdString: 'ORD-8921',
+      userId: user.id,
+      status: 'out_for_delivery',
+      estimatedTime: '18 min ETA',
+      driverName: 'Marcus Vance',
+      deliveryAddress: 'Apt 4B, 742 Evergreen Terr',
+      deliveryFee: 3.99,
+      totalPrice: 42.50,
+      items: {
+        create: [
+          { name: 'Artisan Sourdough', price: 14.50, quantity: 1 },
+          { name: 'Fresh Patisserie Box', price: 28.00, quantity: 2 },
+        ],
+      },
+    },
+  });
 
   console.log('🌱 Database has been seeded with initial tracking data!');
 }
