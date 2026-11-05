@@ -1,0 +1,22 @@
+# --- Flutter / Mobile Ignores ---
+/mobile/.dart_tool/
+/mobile/.pub-cache/
+/mobile/.pub/
+/mobile/build/
+/mobile/linux/flutter/ephemeral/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# --- Backend / Node Ignores ---
+/backend/node_modules/
+/backend/dist/
+/backend/.env
+
+# --- Docker Volume Data ---
+# Ensures local postgres data volumes aren't tracked
+postgres_data/
+pgdata/
+
+# --- OS Generated Files ---
+.DS_Store
+Thumbs.db
