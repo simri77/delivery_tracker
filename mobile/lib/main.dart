@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
 import 'models/order_model.dart';
+import 'services/shared_prefs_helper.dart';
+import 'screens/login_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/delivery_screen.dart';
 import 'screens/profile_screen.dart';
 
-void main() {
-  runApp(const DeliveryTrackerApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Check if token exists locally to determine starting route
+  final token = await SharedPrefsHelper.getToken();
+  final bool isLoggedIn = token != null && token.isNotEmpty;
+
+  runApp(DeliveryTrackerApp(isLoggedIn: isLoggedIn));
 }
 
 class DeliveryTrackerApp extends StatelessWidget {
-  const DeliveryTrackerApp({Key? key}) : super(key: key);
+  final bool isLoggedIn;
+
+  const DeliveryTrackerApp({Key? key, required this.isLoggedIn}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +30,8 @@ class DeliveryTrackerApp extends StatelessWidget {
         fontFamily: 'Roboto',
         scaffoldBackgroundColor: const Color(0xFFFAF8FF),
       ),
-      home: const MainNavigationScreen(),
+      // Directs user to MainNavigationScreen if token exists, otherwise LoginScreen
+      home: isLoggedIn ? const MainNavigationScreen() : const LoginScreen(),
     );
   }
 }
