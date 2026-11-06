@@ -8,44 +8,58 @@ generator client {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   name      String
-  email     String   @unique
-  tier      String   @default("Gold Member")
+  email     String    @unique
+  password  String
+  phone     String?
+  tier      String    @default("Standard Member")
+  points    Int       @default(100)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  // Relations
   orders    Order[]
   addresses Address[]
-  createdAt DateTime @default(now())
 }
 
 model Address {
-  id       Int     @id @default(autoincrement())
-  userId   Int
-  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  street   String
-  city     String
-  isDefault Boolean @default(false)
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  addressLine  String
+  city         String
+  postalCode   String?
+  isDefault    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  // Relation to User
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Order {
-  id             Int         @id @default(autoincrement())
-  orderIdString  String      @unique // e.g., 'ORD-89421'
-  userId         Int
-  user           User        @relation(fields: [userId], references: [id])
-  status         String      // 'placed', 'preparing', 'out_for_delivery', 'delivered'
-  estimatedTime  String
-  driverName     String
-  deliveryAddress String
-  deliveryFee    Decimal     @db.Decimal(10, 2)
-  totalPrice     Decimal     @db.Decimal(10, 2)
-  items          OrderItem[]
-  createdAt      DateTime    @default(now())
+  id              Int         @id @default(autoincrement())
+  userId          Int
+  orderIdString   String      @unique
+  status          String      @default("processing") // e.g., 'out_for_delivery', 'delivered'
+  estimatedTime   String?
+  driverName      String?
+  deliveryAddress String?
+  totalPrice      Float
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  // Relations
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items           OrderItem[]
 }
 
 model OrderItem {
-  id      Int    @id @default(autoincrement())
-  orderId Int
-  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  name    String
-  price   Decimal @db.Decimal(10, 2)
-  quantity Int
+  id        Int     @id @default(autoincrement())
+  orderId   Int
+  name      String
+  quantity  Int
+  price     Float
+
+  // Relation to Order
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
 }
