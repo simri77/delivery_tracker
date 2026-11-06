@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
+import '../models/order_model.dart';
 
 class DeliveryScreen extends StatelessWidget {
-  const DeliveryScreen({Key? key}) : super(key: key);
+  final OrderModel order;
+  const DeliveryScreen({Key? key, required this.order}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFAF8FF),
+      appBar: AppBar(
+  title: const Text('Live Dispatch Tracking', style: TextStyle(color: Color(0xFF131B2E), fontWeight: FontWeight.bold)),
+  backgroundColor: Colors.white,
+  elevation: 0,
+  iconTheme: const IconThemeData(color: Color(0xFF131B2E)), // Fixed here
+),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // ETA Obsidian Telemetry Hero Card[cite: 5]
+            // ETA Obsidian Telemetry Hero Card (Connected to order model)
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(20),
@@ -32,7 +40,7 @@ class DeliveryScreen extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                         decoration: BoxDecoration(color: const Color(0xFF97F5CC), borderRadius: BorderRadius.circular(20)),
-                        child: const Text('OUT FOR DELIVERY', style: TextStyle(color: Color(0xFF002115), fontSize: 10, fontWeight: FontWeight.bold)),
+                        child: Text(order.status.toUpperCase().replaceAll('_', ' '), style: const TextStyle(color: Color(0xFF002115), fontSize: 10, fontWeight: FontWeight.bold)),
                       ),
                       Row(
                         children: const [
@@ -47,14 +55,14 @@ class DeliveryScreen extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.baseline,
                     textBaseline: TextBaseline.alphabetic,
-                    children: const [
-                      Text('7:42 PM', style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold)),
-                      SizedBox(width: 8),
-                      Text('(14 mins away)', style: TextStyle(color: Color(0xFF4EDEA3), fontSize: 14, fontWeight: FontWeight.w500)),
+                    children: [
+                      Text(order.estimatedTime, style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
+                      const SizedBox(width: 8),
+                      const Text('(Live ETA)', style: TextStyle(color: Color(0xFF4EDEA3), fontSize: 14, fontWeight: FontWeight.w500)),
                     ],
                   ),
                   const SizedBox(height: 4),
-                  const Text('En route from 84 Bleecker St to 742 Evergreen Terr', style: TextStyle(color: Colors.white70, fontSize: 12)),
+                  Text('En route to ${order.deliveryAddress}', style: const TextStyle(color: Colors.white70, fontSize: 12)),
                   const SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -80,7 +88,7 @@ class DeliveryScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
-            // Stepper Card[cite: 5]
+            // Stepper Card
             Container(
               padding: const EdgeInsets.all(16),
               decoration: _cardDecoration(),
@@ -100,7 +108,7 @@ class DeliveryScreen extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                         decoration: BoxDecoration(color: const Color(0xFF97F5CC), borderRadius: BorderRadius.circular(20)),
-                        child: const Text('Real-Time', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF007353))),
+                        child: Text(order.orderIdString, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF007353))),
                       ),
                     ],
                   ),
@@ -111,7 +119,7 @@ class DeliveryScreen extends StatelessWidget {
                       _buildStepItem('Placed', '7:10 PM', true, true),
                       _buildStepItem('Prepared', '7:25 PM', true, true),
                       _buildStepItem('Delivering', '7:35 PM', true, false, isActive: true),
-                      _buildStepItem('Delivered', 'Est. 7:48 PM', false, false),
+                      _buildStepItem('Delivered', 'Est.', false, false),
                     ],
                   ),
                 ],
@@ -119,7 +127,7 @@ class DeliveryScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
-            // Courier Contact Card[cite: 5]
+            // Courier Contact Card (Connected to order.driverName)
             Container(
               padding: const EdgeInsets.all(16),
               decoration: _cardDecoration(),
@@ -134,10 +142,10 @@ class DeliveryScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
-                              children: const [
-                                Text('Marcus Vance', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF131B2E))),
-                                SizedBox(width: 6),
-                                Text('4.9 ★', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: Color(0xFF006C49))),
+                              children: [
+                                Text(order.driverName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF131B2E))),
+                                const SizedBox(width: 6),
+                                const Text('4.9 ★', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: Color(0xFF006C49))),
                               ],
                             ),
                             const SizedBox(height: 2),
@@ -155,7 +163,7 @@ class DeliveryScreen extends StatelessWidget {
                         child: ElevatedButton.icon(
                           onPressed: () {},
                           icon: const Icon(Icons.call, size: 18, color: Color(0xFF007353)),
-                          label: const Text('Call Marcus', style: TextStyle(color: Color(0xFF007353), fontWeight: FontWeight.bold)),
+                          label: Text('Call ${order.driverName.split(' ').first}', style: const TextStyle(color: Color(0xFF007353), fontWeight: FontWeight.bold)),
                           style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF97F5CC), elevation: 0, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)), minimumSize: const Size(0, 44)),
                         ),
                       ),
