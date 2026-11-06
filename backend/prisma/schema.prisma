@@ -8,26 +8,58 @@ generator client {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String
+  id        Int       @id @default(autoincrement())
   name      String
+  email     String    @unique
+  password  String
   phone     String?
-  tier      String   @default("Gold Tier Member")
-  points    Int      @default(4820)
+  tier      String    @default("Standard Member")
+  points    Int       @default(100)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  // Relations
   orders    Order[]
-  createdAt DateTime @default(now())
+  addresses Address[]
+}
+
+model Address {
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  addressLine  String
+  city         String
+  postalCode   String?
+  isDefault    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  // Relation to User
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Order {
-  id              Int      @id @default(autoincrement())
-  orderIdString   String   @unique
-  status          String   @default("out_for_delivery")
-  estimatedTime   String
-  driverName      String
-  deliveryAddress String
-  totalPrice      Float
+  id              Int         @id @default(autoincrement())
   userId          Int
-  user            User     @relation(fields: [userId], references: [id])
-  createdAt       DateTime @default(now())
+  orderIdString   String      @unique
+  status          String      @default("processing") // e.g., 'out_for_delivery', 'delivered'
+  estimatedTime   String?
+  driverName      String?
+  deliveryAddress String?
+  totalPrice      Float
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  // Relations
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items           OrderItem[]
+}
+
+model OrderItem {
+  id        Int     @id @default(autoincrement())
+  orderId   Int
+  name      String
+  quantity  Int
+  price     Float
+
+  // Relation to Order
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
 }
