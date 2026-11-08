@@ -2,11 +2,25 @@
   import 'package:flutter/material.dart';
   import 'package:http/http.dart' as http;
   import '../services/shared_prefs_helper.dart';
+  import '../services/secure_storage_helper.dart';
   import 'login_screen.dart';
 
   class ProfileScreen extends StatefulWidget {
     const ProfileScreen({Key? key}) : super(key: key);
 
+    Future<void> _handleLogout(BuildContext context) async {
+    // Clear the encrypted token from secure storage
+    await SecureStorageHelper.clearToken();
+
+    if (!context.mounted) return;
+
+    // Navigate to LoginScreen and clear the entire navigation history stack
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginScreen()),
+      (route) => false, // Removes all previous screens so the user can't press back
+    );
+  }
     @override
     State<ProfileScreen> createState() => _ProfileScreenState();
   }
@@ -59,6 +73,7 @@
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
+                  await SecureStorageHelper.saveToken(data['token']);
                   // User Identity & Metrics Card
                   Container(
                     width: double.infinity,
@@ -91,6 +106,7 @@
                             ),
                           ],
                         ),
+                        await SecureStorageHelper.clearToken();
                         const SizedBox(height: 12),
                         Text(
                           user['name'] ?? 'Alexandria Rivera',
