@@ -32,7 +32,31 @@ class ApiService {
     );
   }
 
-  // 1. Fetch Active Order (Protected endpoint)
+  // ==================== AUTH METHODS ====================
+
+  // 1. Login User
+  static Future> login(String email, String password) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/auth/login'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'email': email, 'password': password}),
+    );
+    return jsonDecode(response.body);
+  }
+
+  // 2. Register User
+  static Future> register(String name, String email, String password, String phone) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/auth/register'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'name': name, 'email': email, 'password': password, 'phone': phone}),
+    );
+    return jsonDecode(response.body);
+  }
+
+  // ==================== ORDER & PROFILE METHODS ====================
+
+  // 3. Fetch Active Order (Protected endpoint)
   static Future<OrderModel> fetchActiveOrder() async {
     try {
       final response = await _getRequest('/orders/active');
@@ -57,7 +81,23 @@ class ApiService {
     }
   }
 
-  // 2. Fetch User Profile (Protected endpoint)
+  // 4. Create New Order (Protected endpoint)
+  static Future<OrderModel> createOrder(String deliveryAddress, double totalPrice, List> items) async {
+    final response = await _postRequest('/orders', {
+      'deliveryAddress': deliveryAddress,
+      'totalPrice': totalPrice,
+      'items': items,
+    });
+
+    if (response.statusCode == 201) {
+      final data = jsonDecode(response.body);
+      return OrderModel.fromJson(data['order']);
+    } else {
+      throw Exception(jsonDecode(response.body)['error'] ?? 'Failed to create order');
+    }
+  }
+
+  // 5. Fetch User Profile (Protected endpoint)
   static Future> fetchUserProfile() async {
     try {
       final response = await _getRequest('/user/profile');
