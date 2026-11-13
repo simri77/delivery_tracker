@@ -11,7 +11,6 @@ A modern, multi-screen mobile delivery tracking application built with **Flutter
 - **Live Order Simulation**: Interactive status stepper (`Placed` $\rightarrow$ `Preparing` $\rightarrow$ `On the Way` $\rightarrow$ `Delivered`) with dynamic ETA and driver contact cards.
 - **Responsive Layout**: Optimized for both mobile phones and tablet viewports.
 
----
 
 ## 📱 Tech Stack
 
